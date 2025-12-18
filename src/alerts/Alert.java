@@ -61,6 +61,11 @@ public class Alert {
     public void setStatus(AlertStatus status) {
         this.status = status;
     }
+    public void updateSeverity(AlertSeverity newSeverity) {
+        if (this.status != AlertStatus.NEW) {
+            this.severity = newSeverity;
+        }
+
 
   
 }
