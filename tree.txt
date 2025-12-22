@@ -1,0 +1,26 @@
+MySOCProject/
+│
+├── users/          ← Utilisateurs SOC
+│   ├── User.java
+│   ├── SocUser.java
+│   └── SocRole.java
+│
+├── alerts/         ← Alertes & Incidents
+│   ├── Alert.java
+│   ├── AlertSeverity.java
+│   ├── AlertStatus.java
+│   └── Incident.java   
+│
+├── security/       ← Logique cybersécurité
+│   ├── DetectionEngine.java
+│   ├── LogEntry.java
+│   └── Blacklist.java
+│
+├── database/       ← Accès base SQL Server
+│   ├── DBConnection.java
+│   ├── AlertDAO.java
+│   ├── IncidentDAO.java
+│   └── UserDAO.java
+│
+└── main/
+    └── Main.java

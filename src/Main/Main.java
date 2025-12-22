@@ -1,5 +1,4 @@
 package Main;
-import java.time.LocalDateTime;
 import alerts.*;
 import Users.*;
 
@@ -18,7 +17,7 @@ public class Main {
         System.out.println("Role: " + analystL1.getRole());
 
         // 2️⃣ Création d’une alerte (simulée IDS)
-        Alert alert = new Alert("A001","SSH Brute Force",AlertSeverity.High,"192.168.1.1","10.0.0.5","open");
+        Alert alert = new Alert("A001","SSH Brute Force",AlertSeverity.High,"192.168.1.1","10.0.0.5");
 
         System.out.println("\n--- Alert Created ---");
         System.out.println(alert);
