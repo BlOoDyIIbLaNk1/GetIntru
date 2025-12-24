@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <top>
+        <VBox spacing="10.0">
+            <padding><Insets bottom="8" left="12" right="12" top="12" /></padding>
+
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Détails de l'incident" />
+
+            <!-- En-tête incident sélectionné -->
+            <VBox spacing="6.0" style="-fx-background-color: #f7f7f7; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+                <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+
+                <HBox spacing="10">
+                    <Label style="-fx-text-fill: #444;" text="ID:" />
+                    <Label fx:id="lblIncidentId" style="-fx-font-weight: bold;" text="—" />
+                    <Label style="-fx-text-fill: #444;" text="Status:" />
+                    <Label fx:id="lblIncidentStatus" style="-fx-font-weight: bold;" text="—" />
+                    <Label style="-fx-text-fill: #444;" text="Severity:" />
+                    <Label fx:id="lblIncidentSeverity" style="-fx-font-weight: bold;" text="—" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label style="-fx-text-fill: #444;" text="Titre:" />
+                    <Label fx:id="lblIncidentTitle" text="Sélectionne un incident à gauche." />
+                </HBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                    <Button onAction="#onAssignIncident" text="Assigner" />
+                    <Button onAction="#onResolveIncident" text="Résoudre" />
+                </HBox>
+            </VBox>
+
+            <Separator />
+
+            <!-- Filtres alertes -->
+            <HBox spacing="10.0">
+                <Label text="Filtre alertes:" />
+                <TextField fx:id="txtAlertSearch" promptText="IP, type, message..." HBox.hgrow="ALWAYS" />
+                <Label text="Severity:" />
+                <ComboBox fx:id="cmbAlertSeverity" prefWidth="140.0" />
+                <Button onAction="#onRefreshAlerts" text="Refresh alertes" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10.0">
+            <padding><Insets bottom="12" left="12" right="12" top="0" /></padding>
+
+            <TableView fx:id="tblAlerts" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colATimestamp" prefWidth="160.0" text="Timestamp" />
+                    <TableColumn fx:id="colASrcIp" prefWidth="120.0" text="Src IP" />
+                    <TableColumn fx:id="colADstIp" prefWidth="120.0" text="Dst IP" />
+                    <TableColumn fx:id="colAPort" prefWidth="70.0" text="Port" />
+                    <TableColumn fx:id="colAType" prefWidth="160.0" text="Type" />
+                    <TableColumn fx:id="colASeverity" prefWidth="90.0" text="Severity" />
+                    <TableColumn fx:id="colAMessage" prefWidth="320.0" text="Message" />
+                </columns>
+            </TableView>
+
+            <TitledPane expanded="false" text="Alerte sélectionnée (détails)">
+                <content>
+                    <TextArea fx:id="txtAlertDetails" editable="false" prefRowCount="6" wrapText="true" />
+                </content>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <padding><Insets bottom="12" left="12" right="12" top="8" /></padding>
+            <Label fx:id="lblAlertsCount" style="-fx-text-fill: #555;" text="0 alerte(s)" />
+        </HBox>
+    </bottom>
+
+</BorderPane>
