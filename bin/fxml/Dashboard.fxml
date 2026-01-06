@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nids.DashboardController">
+
+    <top>
+        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="12" left="12" right="12" top="12" />
+            </padding>
+
+            <!-- KPIs -->
+            <HBox alignment="CENTER_LEFT" spacing="12.0">
+                <VBox prefWidth="200.0" spacing="4.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+                    <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #444;" text="Total Incidents" />
+                    <Label fx:id="lblTotal" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" />
+                </VBox>
+
+                <VBox prefWidth="200.0" spacing="4.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+                    <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #444;" text="Critical" />
+                    <Label fx:id="lblCritical" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" />
+                </VBox>
+
+                <VBox prefWidth="200.0" spacing="4.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+                    <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #444;" text="High" />
+                    <Label fx:id="lblHigh" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" />
+                </VBox>
+            <VBox prefWidth="200.0" spacing="4.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+               <padding>
+                  <Insets bottom="10" left="10" right="10" top="10" />
+               </padding>
+               <children>
+                  <Label style="-fx-font-size: 12px; -fx-text-fill: #444;" text="Medium" />
+                  <Label fx:id="lblCritical1" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" />
+               </children>
+            </VBox>
+            <VBox prefWidth="200.0" spacing="4.0" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-background-radius: 6; -fx-border-radius: 6;">
+               <padding>
+                  <Insets bottom="10" left="10" right="10" top="10" />
+               </padding>
+               <children>
+                  <Label style="-fx-font-size: 12px; -fx-text-fill: #444;" text="Low" />
+                  <Label fx:id="lblCritical11" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" />
+               </children>
+            </VBox>
+            </HBox>
+
+            <Separator />
+
+            <!-- Filtres + actions -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="Filtre:" />
+                <TextField fx:id="txtSearch" promptText="IP, type, severity, sensor, message..." HBox.hgrow="ALWAYS" />
+
+                <Label text="Severity:" />
+                <ComboBox fx:id="cmbSeverity" prefWidth="140.0" />
+
+                <Button fx:id="btnAddDemo" onAction="#onAddDemo" text="Add User" />
+                <Button fx:id="btnClear" onAction="#onClear" text="Clear" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="12" left="12" right="12" top="0" />
+            </padding>
+
+            <!-- Graphe -->
+            <LineChart fx:id="lineChart" animated="false" createSymbols="false" legendVisible="false" title="Incidents" VBox.vgrow="NEVER">
+                <xAxis>
+                    <NumberAxis label="Temps (ticks)" fx:id="xAxis" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Alertes / fenêtre" />
+                </yAxis>
+            </LineChart>
+
+            <!-- Table -->
+            <TableView fx:id="tblAlerts" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colTimestamp" prefWidth="160.0" text="Timestamp" />
+                    <TableColumn fx:id="colSrcIp" prefWidth="120.0" text="Src IP" />
+                    <TableColumn fx:id="colDstIp" prefWidth="120.0" text="Dst IP" />
+                    <TableColumn fx:id="colPort" prefWidth="70.0" text="Port" />
+                    <TableColumn fx:id="colType" prefWidth="160.0" text="Type" />
+                    <TableColumn fx:id="colSeverity" prefWidth="90.0" text="Severity" />
+                    <TableColumn fx:id="colMessage" prefWidth="300.0" text="Message" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>
