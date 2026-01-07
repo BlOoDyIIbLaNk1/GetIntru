@@ -12,6 +12,8 @@ public class Incident {
     private List<Alert> alerts;
     private LocalDateTime createdAt;
     private boolean resolved;
+    private AlertSeverity severity = AlertSeverity.Low;
+
 
     public Incident(String id, String title, String description) {
         this.id = id;
@@ -40,6 +42,10 @@ public class Incident {
     public String getId() {
         return id;
     }
+    
+    public String getDescription() {
+    	return description;
+    	}
 
     public String getTitle() {
         return title;
@@ -66,4 +72,7 @@ public class Incident {
                 ", resolved=" + resolved +
                 '}';
     }
+    
+    public AlertSeverity getSeverity() { return severity; }
+    public void setSeverity(AlertSeverity severity) { this.severity = severity; }
 }
