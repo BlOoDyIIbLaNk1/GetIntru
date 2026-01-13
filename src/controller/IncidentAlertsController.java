@@ -170,6 +170,21 @@ public class IncidentAlertsController {
         details.append("Message: ").append(alert.getMessage()).append("\n");
         txtAlertDetails.setText(details.toString());
     }
+    private void showError(String title, String message) {
+        javafx.scene.control.Alert dialog = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+        dialog.setContentText(message);
+        dialog.showAndWait();
+    }
+
+    private void showInfo(String title, String message) {
+        javafx.scene.control.Alert dialog = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+        dialog.setContentText(message);
+        dialog.showAndWait();
+    }
 
     @FXML
     private void onRefreshAlerts() {
@@ -181,28 +196,48 @@ public class IncidentAlertsController {
     @FXML
     private void onAssignIncident() {
         if (selectedIncident == null) {
-            showAlert("Aucun incident sélectionné", "Veuillez sélectionner un incident.");
+            showInfo("Aucun incident", "Veuillez sélectionner un incident.");
             return;
         }
-        // TODO: Implement assignment logic
-        showAlert("Information", "Fonctionnalité d'assignation à implémenter.");
+
+        if (Session.getCurrentUser() == null) {
+            showError("Erreur", "Aucun utilisateur en session (login).");
+            return;
+        }
+
+        try {
+            incidentDAO.assignIncident(selectedIncident.getId(), Session.getCurrentUser().getId());
+            lblIncidentStatus.setText("INPROGRESS");
+            showInfo("Succès", "Incident assigné à " + Session.getCurrentUser().getUsername());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showError("Erreur", "Erreur assignation: " + e.getMessage());
+        }
     }
 
     @FXML
     private void onResolveIncident() {
         if (selectedIncident == null) {
-            showAlert("Aucun incident sélectionné", "Veuillez sélectionner un incident.");
+            showInfo("Aucun incident", "Veuillez sélectionner un incident.");
             return;
         }
-        
+
         try {
-            incidentDAO.updateStatus(selectedIncident.getId(), "RESOLVED", true);
+            // 1) incident en CLOSED/RESOLVED en DB
+            incidentDAO.updateStatus(selectedIncident.getId(), "CLOSED", true);
+
+            // 2) fermer toutes les alertes liées
+            alertDAO.closeAlertsByIncidentId(selectedIncident.getId());
+
+            // 3) refresh UI
             selectedIncident.closeIncident();
             updateIncidentDetails(selectedIncident);
-            showAlert("Succès", "Incident résolu avec succès.");
+            loadAlertsForIncident(selectedIncident.getId());
+
+            showInfo("Succès", "Incident résolu et alertes fermées.");
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Erreur lors de la résolution de l'incident: " + e.getMessage());
+            showError("Erreur", "Erreur résolution: " + e.getMessage());
         }
     }
 

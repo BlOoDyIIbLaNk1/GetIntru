@@ -40,6 +40,28 @@ public class IncidentDAO {
             ps.executeUpdate();
         }
     }
+    
+    public void assignIncident(String incidentId, String userId) throws SQLException {
+        String sql = "UPDATE incidents SET assigned_to_id = ?, status = ? WHERE id = ?";
+        try (Connection c = DBConnexion.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            ps.setString(2, "INPROGRESS");
+            ps.setString(3, incidentId);
+            ps.executeUpdate();
+        }
+    }
+    public void closeAlertsByIncidentId(String incidentId) throws SQLException {
+        String sql = "UPDATE alerts SET status = ? WHERE incident_id = ?";
+        try (Connection c = DBConnexion.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, "CLOSED");
+            ps.setString(2, incidentId);
+            ps.executeUpdate();
+        }
+    }
 
     public void updateStatus(String incidentId, String status, boolean resolved) throws SQLException {
         String sql = "UPDATE incidents SET status = ?, resolved = ? WHERE id = ?";

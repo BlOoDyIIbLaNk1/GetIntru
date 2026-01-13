@@ -21,6 +21,8 @@
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Incidents" />
                     <TextField fx:id="txtIncidentSearch" promptText="Rechercher incident (id, titre, status...)" />
                     <HBox spacing="8.0">
+                    <Button text="Retour" onAction="#onBackToDashboard" />
+                    
                         <Button onAction="#onRefreshIncidents" text="Refresh" />
                     </HBox>
                 </VBox>

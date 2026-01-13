@@ -44,6 +44,9 @@ public class LoginController {
             if (userOpt.isPresent()) {
                 // Login successful - navigate to Dashboard
                 navigateToDashboard();
+                Session.setCurrentUser(userOpt.get());
+                navigateToDashboard();
+
             } else {
                 showError("Nom d'utilisateur ou mot de passe incorrect.");
             }

@@ -72,4 +72,15 @@ public class AlertDAO {
         }
         return list;
     }
+    public void closeAlertsByIncidentId(String incidentId) throws SQLException {
+        String sql = "UPDATE alerts SET status = ? WHERE incident_id = ?";
+        try (Connection c = DBConnexion.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, AlertStatus.CLOSED.name());
+            ps.setString(2, incidentId);
+            ps.executeUpdate();
+        }
+    }
+
 }

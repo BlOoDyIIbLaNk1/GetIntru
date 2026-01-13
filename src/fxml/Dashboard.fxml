@@ -70,8 +70,8 @@
 
                 <Label text="Severity:" />
                 <ComboBox fx:id="cmbSeverity" prefWidth="140.0" />
-
-                <Button fx:id="btnAddDemo" onAction="#onAddDemo" text="Add User" />
+				<Button fx:id="btnIncidents" onAction="#onOpenIncidents" text="Incidents" />
+				<Button fx:id="btnRefresh" onAction="#onRefresh" text="Refresh" />
                 <Button fx:id="btnClear" onAction="#onClear" text="Clear" />
             </HBox>
         </VBox>

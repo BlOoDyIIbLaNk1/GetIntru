@@ -1,6 +1,7 @@
 package controller;
 
 import alerts.Alert;
+
 import alerts.AlertSeverity;
 import alerts.Incident;
 import databse.AlertDAO;
@@ -18,6 +19,15 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,6 +38,8 @@ import java.util.stream.Collectors;
 
 public class DashboardController {
 
+	@FXML 
+	private Button btnRefresh;
     @FXML
     private Label lblTotal;
     @FXML
@@ -73,6 +85,8 @@ public class DashboardController {
     private AlertDAO alertDAO = new AlertDAO();
     private ObservableList<AlertTableModel> alertData = FXCollections.observableArrayList();
     private FilteredList<AlertTableModel> filteredAlerts;
+    private Timeline autoRefresh;
+
 
     @FXML
     private void initialize() {
@@ -80,6 +94,34 @@ public class DashboardController {
         setupSeverityComboBox();
         setupFilters();
         loadData();
+
+        // Auto refresh toutes les 2 secondes
+        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+            loadData();
+            applyFilters();
+        }));
+        autoRefresh.setCycleCount(Timeline.INDEFINITE);
+        autoRefresh.play();
+    }
+    
+    @FXML
+    private void onRefresh() {
+        loadData();
+        applyFilters();
+    }
+
+    @FXML
+    private void onOpenIncidents() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Incidents_view.fxml"));
+            Stage stage = (Stage) tblAlerts.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("NIDS - Incidents");
+            stage.setResizable(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupTableColumns() {
@@ -185,19 +227,7 @@ public class DashboardController {
         });
     }
 
-    @FXML
-    private void onAddDemo() {
-        // Navigate to register or add user functionality
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Register.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("NIDS - Ajouter Utilisateur");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     @FXML
     private void onClear() {
@@ -215,6 +245,23 @@ public class DashboardController {
         dialog.showAndWait();
     }
 
+    private void openIncidentPage(String incidentId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Incidents.fxml"));
+            Parent root = loader.load();
+
+            IncidentsController ctrl = loader.getController();
+            ctrl.selectIncidentById(incidentId);
+
+            Stage stage = (Stage) tblAlerts.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("NIDS - Incidents");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Inner class for table model
     public static class AlertTableModel {
