@@ -3,10 +3,10 @@ package alerts;
 import java.util.Objects;
 
 /** Clé de corrélation: sourceIP + type. */
-public final class CorrelationKey {
+public class CorrelationKey {
 
-    private final String sourceIP;
-    private final String type;
+    private String sourceIP;
+    private String type;
 
     public CorrelationKey(String sourceIP, String type) {
         this.sourceIP = sourceIP;

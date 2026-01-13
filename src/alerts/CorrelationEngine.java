@@ -98,15 +98,11 @@ public class CorrelationEngine {
     }
 
     private void recomputeIncidentSeverity(Incident incident) {
-        AlertSeverity max = AlertSeverity.Low;
-        for (Alert a : incident.getAlerts()) {
-            if (a.getSeverity().ordinal() > max.ordinal()) {
-                max = a.getSeverity();
-            }
-        }
+    	AlertSeverity max = incident.getAlerts().stream()
+    		    .map(Alert::getSeverity)
+    		    .max(Comparator.comparingInt(AlertSeverity::ordinal))
+    		    .orElse(AlertSeverity.Low);
 
-        // Il faut un setter côté Incident, ou une méthode interne.
-        // Si ton Incident actuel n'a pas de champ severity, ajoute-le.
         incident.setSeverity(max);
     }
 }

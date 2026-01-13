@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Si ton fichier s'appelle login.fxml et est à la racine de resources
-        Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+    	Parent root = FXMLLoader.load(getClass().getResource("/fxml/incident_alerts_view.fxml"));
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("NIDS - Login");
