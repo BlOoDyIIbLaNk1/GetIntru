@@ -1,0 +1,4 @@
+BACKUP 2026-01-15T08:25:36.337634
+Incidents: 2
+Incident{id='INC-1768461896288', title='Incident: MALWARE from 192.168.1.3', alertsCount=1, resolved=false}
+Incident{id='INC-1768461906316', title='Incident: BLACKLISTED_IP from 192.168.1.3', alertsCount=2, resolved=false}

@@ -101,4 +101,35 @@ public class IncidentDAO {
         }
         return list;
     }
+ // TES MÉTHODES EXISTANTES + CES 2 À LA FIN:
+
+    public void upsertIncident(Incident incident) throws SQLException {
+        if (incidentExists(incident.getId())) {
+            String sql = "UPDATE incidents SET title = ?, description = ?, severity = ?, status = ?, resolved = ? WHERE id = ?";
+            try (Connection c = DBConnexion.getConnection();
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setString(1, incident.getTitle());
+                ps.setString(2, incident.getDescription());
+                ps.setString(3, incident.getSeverity().name());
+                ps.setString(4, "NEW");
+                ps.setBoolean(5, incident.isResolved());
+                ps.setString(6, incident.getId());
+                ps.executeUpdate();
+            }
+        } else {
+            insertIncident(incident);
+        }
+    }
+
+    private boolean incidentExists(String incidentId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM incidents WHERE id = ?";
+        try (Connection c = DBConnexion.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, incidentId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0;
+        }
+    }
+
 }

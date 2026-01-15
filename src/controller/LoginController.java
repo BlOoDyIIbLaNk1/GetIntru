@@ -18,14 +18,9 @@ import java.util.Optional;
 
 public class LoginController {
 
-    @FXML
-    private TextField txtUsername;
-
-    @FXML
-    private PasswordField txtPassword;
-
-    @FXML
-    private Label lblError;
+    @FXML private TextField txtUsername;
+    @FXML private PasswordField txtPassword;
+    @FXML private Label lblError;
 
     private UserDAO userDAO = new UserDAO();
 
@@ -42,11 +37,9 @@ public class LoginController {
         try {
             Optional<SOCUSER> userOpt = userDAO.findByUsernameAndPassword(username, password);
             if (userOpt.isPresent()) {
-                // Login successful - navigate to Dashboard
-                navigateToDashboard();
+                // ✅ FIX: UN SEUL navigateToDashboard()
                 Session.setCurrentUser(userOpt.get());
                 navigateToDashboard();
-
             } else {
                 showError("Nom d'utilisateur ou mot de passe incorrect.");
             }
@@ -67,9 +60,12 @@ public class LoginController {
     private void onGoToRegister() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/Register.fxml"));
-            Stage stage = (Stage) txtUsername.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("NIDS - Inscription");
+            // ✅ SAFE: Vérifier si scene existe
+            if (txtUsername.getScene() != null) {
+                Stage stage = (Stage) txtUsername.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("NIDS - Inscription");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,10 +74,20 @@ public class LoginController {
     private void navigateToDashboard() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
-            Stage stage = (Stage) txtUsername.getScene().getWindow();
+            
+            // ✅ FIX: Utilise la scène courante de façon SAFE
+            Stage stage;
+            if (txtUsername != null && txtUsername.getScene() != null) {
+                stage = (Stage) txtUsername.getScene().getWindow();
+            } else {
+                stage = new Stage(); // Fallback
+            }
+            
             stage.setScene(new Scene(root));
             stage.setTitle("NIDS - Dashboard");
             stage.setResizable(true);
+            stage.centerOnScreen();
+            
         } catch (IOException e) {
             e.printStackTrace();
             showError("Erreur lors du chargement du dashboard.");
@@ -92,4 +98,3 @@ public class LoginController {
         lblError.setText(message);
     }
 }
-

@@ -1,5 +1,6 @@
 package Main;
 
+import Security.BackupService;
 import Security.DetectionEngine;
 import Security.LogGenerateur;
 import Security.LogPipelineService;
@@ -14,12 +15,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    private BackupService backupService;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         // --- BACKEND ---
         DetectionEngine detectionEngine = new DetectionEngine();
-        CorrelationEngine correlationEngine = new CorrelationEngine(); // ou avec fenêtre si tu as
+        CorrelationEngine correlationEngine = new CorrelationEngine();
         IncidentDAO incidentDAO = new IncidentDAO();
         AlertDAO alertDAO = new AlertDAO();
 
@@ -27,8 +30,13 @@ public class Main extends Application {
                 detectionEngine, correlationEngine, incidentDAO, alertDAO
         );
 
+        // ✅ MODIFIÉ: BackupService simple (SEUL correlationEngine)
+        backupService = new BackupService(correlationEngine);  // ← CHANGÉ ICI
+        backupService.startDailyBackup();
+
+        // Log generator
         Thread t = new Thread(new LogGenerateur(pipeline));
-        t.setDaemon(true); // important: se ferme quand l'app se ferme
+        t.setDaemon(true);
         t.start();
 
         // --- UI ---
@@ -37,6 +45,14 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        if (backupService != null) {
+            backupService.stop();
+        }
+        super.stop();
     }
 
     public static void main(String[] args) {

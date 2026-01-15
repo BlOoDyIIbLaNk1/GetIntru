@@ -16,7 +16,7 @@ public class LogGenerateur implements Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(10000);
 
                 String ip = "192.168.1." + (random.nextInt(5) + 1);
 
